@@ -2,37 +2,38 @@ import java.io.*;
 
 class lexico
 {
-	int charClass;
-	char lexeme [100];
-	char nextChar;
-	int lexLen;
-	int token;
-	int nextToken;
+	public int charClass;
+	public char[] lexeme =new char[100];
+	public char nextChar;
+	public int lexLen;
+	public int token;
+	public int nextToken;
 
 	/* Character classes */
-	int LETTER =0;
-	int DIGIT = 1;
-	int UNKNOWN = 99;
-	int NOT_VALID = 100;
+	private static final int LETTER =0;
+	private static final int DIGIT = 1;
+	private static final int UNKNOWN = 99;
+	private static final int NOT_VALID = 100;
 	/* Token codes */
-	int INT_LIT = 10;
-	int FLOAT = 12;
-	int IDENT = 11;
-	int ASSIGN_OP = 20;
-	int ADD_OP = 21;
-	int SUB_OP = 22;
-	int MULT_OP = 23;
-	int DIV_OP = 24;
-	int LEFT_PAREN = 25;
-	int RIGHT_PAREN = 26;
-	int FLOAT_POINT = 27;
+	private static final int INT_LIT = 10;
+	private static final int FLOAT = 12;
+	private static final int IDENT = 11;
+	private static final int ASSIGN_OP = 20;
+	private static final int ADD_OP = 21;
+	private static final int SUB_OP = 22;
+	private static final int MULT_OP = 23;
+	private static final int DIV_OP = 24;
+	private static final int LEFT_PAREN = 25;
+	private static final int RIGHT_PAREN = 26;
+	private static final int POINT = 27;
+	private static final int FLOAT = 28;
 
 
 
 		/*****************************************************/
 	/* lookup - a function to lookup operators and parentheses
 	and return the token */
-	int lookup(char ch) {
+	public int lookup(char ch) {
 	switch (ch) {
 		case '(':
 			addChar();
@@ -64,27 +65,28 @@ class lexico
 			break;
 		default:
 			addChar();
-			nextToken = EOF;
+			nextToken = 100;
 			break;
 		}
 		return nextToken;
 	}
 	/*****************************************************/
 	/* addChar - a function to add nextChar to lexeme */
-	void addChar() {
+	public void addChar() {
 		if (lexLen <= 98) {
 			lexeme[lexLen++] = nextChar;
 			lexeme[lexLen] = 0;
 			}
 		else
-			printf("Error - lexeme is too long \n");
+			//printf("Error - lexeme is too long \n");
+			System.out.println("Error - lexeme is too long");
 		}
 
 	/*****************************************************/
 	/* getChar - a function to get the next character of
 	input and determine its character class */
-	void getChar() {
-		if((nextChar = get_c(in_fp)) != '?') 
+	public void getChar() {
+		if((nextChar = get_c()) != '?') 
 		{
 			if(is_alpha(nextChar))
 				charClass = LETTER;
@@ -93,19 +95,19 @@ class lexico
 			else charClass = UNKNOWN;
 		}
 		else
-			charClass = EOF;
+			charClass = 100;
 	}
 
 	/*****************************************************/
 	/* getNonBlank - a function to call getChar until it
 	returns a non-whitespace character */
-	void getNonBlank() 
+	public void getNonBlank() 
 	{
-		while (isspace(nextChar))
+		while (is_space(nextChar))
 			getChar();
 	}
 
-	int lex() 
+	public int lex() 
 	{
 		lexLen = 0;
 		getNonBlank();
@@ -170,9 +172,9 @@ class lexico
 				lookup(nextChar);
 				getChar();
 				break;
-	/* EOF */
-			case EOF:
-				nextToken = EOF;
+	/* 100 */
+			case 100:
+				nextToken = 100;
 				lexeme[0] = 'E';
 				lexeme[1] = 'O';
 				lexeme[2] = 'F';
@@ -186,8 +188,8 @@ class lexico
 	
 
 
-	public int fil;
-	public int col;
+	public int fil=0;
+	public int col=0;
 	Vector<String> chain=new Vector<String>(1,1);
 
 	public char get_c()
@@ -225,6 +227,13 @@ class lexico
 		return false;
 	}
 
+	public bool is_space(char c)
+	{
+		if(c==' ')
+			return true;
+		return false;
+	}
+
 	public static void main(String[] args) throws FileNotFoundException
 	{
 		fil=0;
@@ -235,14 +244,14 @@ class lexico
 
     	
     	String cadena;
-    	while((cadena = b.readLine())!=null)
+    	while((cadena = bf.readLine())!=null)
     		chain.addElement(cadena);
 
     	getChar();
 		do
 		{
 			lex();
-		}while(nextToken != EOF);
+		}while(nextToken != 100);
 	}
 }
 /*
@@ -255,7 +264,7 @@ main() {
 		do
 		{
 			lex();
-		}while(nextToken != EOF);
+		}while(nextToken != 100);
 	}
 }
 */
