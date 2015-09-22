@@ -54,6 +54,7 @@ main() {
 		{
 			lex();
 		}while(nextToken != EOF);
+		//expr();
 	}
 }
 /*****************************************************/
@@ -261,7 +262,7 @@ void factor()
 {
     printf("Enter <factor>\n");
     /* Determine which RHS */
-    if (nextToken == IDENT || nextToken == INT_LIT)
+    if (nextToken == IDENT || nextToken == INT_LIT || nextToken == FLOAT)
         /* Get the next token */
         lex();
     /* If the RHS is ( <expr>), call lex to pass over the
